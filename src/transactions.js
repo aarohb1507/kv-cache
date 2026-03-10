@@ -21,11 +21,7 @@ class KVStore {
     }
   }
   get(key) {
-    for (let i = this.transactions.length - 1; i >= 0; i--) {
-      if (!this.transactions[i].has(key) && !this.store.has(key)) {
-        throw new Error('The key doesnt exist');
-      }
-    }
+    for(let i in this.transactions)
   }
   commit() {
     if (this.transactions.length === 0) {
@@ -41,6 +37,17 @@ class KVStore {
       for (const [key, value] of topTxn) {
         this.store.set(key, value);
       }
+    }
+  }
+  delete(key) {
+    if (this.transactions.length === 0) {
+      throw new Error('No transactions');
+    }
+    const top = this.transactions[this.transactions.length - 1];
+    if (top.has(key)) {
+      top.set(key, DELETED);
+    } else {
+      throw new Error('Key doenst exist');
     }
   }
 }

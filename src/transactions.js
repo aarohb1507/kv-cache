@@ -31,9 +31,9 @@ class KVStore {
         }
         return value;
       }
-      if (this.store.has(key)) {
-        return this.store.get(key);
-      }
+    }
+    if (this.store.has(key)) {
+      return this.store.get(key);
     }
   }
   commit() {

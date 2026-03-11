@@ -53,14 +53,8 @@ class KVStore {
     }
   }
   delete(key) {
-    if (this.transactions.length === 0) {
-      throw new Error('No transactions');
-    }
-    const top = this.transactions[this.transactions.length - 1];
-    if (top.has(key)) {
-      top.set(key, DELETED);
-    } else {
-      throw new Error('Key doenst exist');
-    }
+    const top = this.transactions.length - 1;
+    const DELETED = Symbol('deleted');
+    this.transactions[top].set(key, DELETED);
   }
 }

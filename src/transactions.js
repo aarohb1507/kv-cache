@@ -21,7 +21,20 @@ class KVStore {
     }
   }
   get(key) {
-    for(let i in this.transactions)
+    const top = this.transactions.length - 1;
+    for (let i = top; i >= 0; i--) {
+      let txn = this.transactions[i];
+      if (txn.has(key)) {
+        const value = txn.get(key);
+        if (value === 'DELETED') {
+          return null;
+        }
+        return value;
+      }
+      if (this.store.has(key)) {
+        return this.store.get(key);
+      }
+    }
   }
   commit() {
     if (this.transactions.length === 0) {

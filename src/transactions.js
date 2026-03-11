@@ -2,6 +2,7 @@ class KVStore {
   constructor() {
     this.store = new Map();
     this.transactions = [];
+    const DELETED = Symbol('deleted');
   }
   begin() {
     this.transactions.push(new Map());
@@ -42,8 +43,8 @@ class KVStore {
     }
     const topTxn = this.transactions.pop();
     if (this.transactions.length > 0) {
+      const parent = this.transactions[this.transactions.length - 1];
       for (const [key, value] of topTxn) {
-        const parent = this.transactions[this.transactions.length - 1];
         parent.set(key, value);
       }
     } else {
@@ -54,7 +55,6 @@ class KVStore {
   }
   delete(key) {
     const top = this.transactions.length - 1;
-    const DELETED = Symbol('deleted');
     this.transactions[top].set(key, DELETED);
   }
 }
